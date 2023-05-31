@@ -8,7 +8,16 @@
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UPaperFlipbook;
 class USpringArmComponent;
+
+UENUM()
+enum class ECharacterDirection
+{
+	ECD_Left = 0,
+	ECD_Right,
+	ECD_MAX
+};
 
 UCLASS()
 class GAMEJAM002_API APlayerCharacter : public APaperCharacter
@@ -31,10 +40,20 @@ protected:
 	UInputAction* MoveAction;
 	void Move(const FInputActionValue& Value);
 
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* IdleAnimation;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* RunLeftAnimation;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* RunRightAnimation;
+	void UpdateAnimation();
+
 private:
 	UPROPERTY()
 	USpringArmComponent* CameraBoom;
 
 	UPROPERTY()
 	UCameraComponent* Camera;
+
+	ECharacterDirection CharacterDirection = ECharacterDirection::ECD_Right;
 };
