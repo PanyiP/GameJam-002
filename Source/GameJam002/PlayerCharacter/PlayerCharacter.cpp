@@ -35,17 +35,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
    if (UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent))
    {
-      Input->BindAction(MoveUpAction, ETriggerEvent::Triggered, this, &ThisClass::MoveUp);
-      Input->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &ThisClass::MoveRight);
+      Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
    }
 }
 
-void APlayerCharacter::MoveUp(const FInputActionValue& Value)
+void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-   AddMovementInput(FVector(0.f, Value.Get<float>(), 0.f));
-}
-
-void APlayerCharacter::MoveRight(const FInputActionValue& Value)
-{
-   AddMovementInput(FVector(Value.Get<float>(), 0.f, 0.f));
+   AddMovementInput(FVector(Value.Get<FVector2D>().X, Value.Get<FVector2D>().Y, 0.f));
 }

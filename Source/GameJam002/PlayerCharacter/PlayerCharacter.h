@@ -26,11 +26,8 @@ protected:
 	UInputMappingContext* InputMappingContext;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* MoveUpAction;
-	void MoveUp(const FInputActionValue& Value);
-	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* MoveRightAction;
-	void MoveRight(const FInputActionValue& Value);
+	UInputAction* MoveAction;
+	void Move(const FInputActionValue& Value);
 
 private:
 
