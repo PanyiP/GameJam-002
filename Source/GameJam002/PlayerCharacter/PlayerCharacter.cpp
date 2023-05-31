@@ -33,11 +33,19 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-   UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-   // You can bind to any of the trigger events here by changing the "ETriggerEvent" enum value
-   Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
+   if (UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+   {
+      Input->BindAction(MoveUpAction, ETriggerEvent::Triggered, this, &ThisClass::MoveUp);
+      Input->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &ThisClass::MoveRight);
+   }
 }
 
-void APlayerCharacter::Move(const FInputActionValue& Value)
+void APlayerCharacter::MoveUp(const FInputActionValue& Value)
 {
+   AddMovementInput(FVector(0.f, Value.Get<float>(), 0.f));
+}
+
+void APlayerCharacter::MoveRight(const FInputActionValue& Value)
+{
+   AddMovementInput(FVector(Value.Get<float>(), 0.f, 0.f));
 }
