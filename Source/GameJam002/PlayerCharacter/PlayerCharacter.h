@@ -5,8 +5,10 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
+class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class USpringArmComponent;
 
 UCLASS()
 class GAMEJAM002_API APlayerCharacter : public APaperCharacter
@@ -30,5 +32,9 @@ protected:
 	void Move(const FInputActionValue& Value);
 
 private:
+	UPROPERTY()
+	USpringArmComponent* CameraBoom;
 
+	UPROPERTY()
+	UCameraComponent* Camera;
 };

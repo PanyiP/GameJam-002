@@ -1,11 +1,20 @@
-#include "PlayerCharacter.h"
-#include "InputMappingContext.h"
-#include "EnhancedInputSubsystems.h"
+#include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "InputMappingContext.h"
+#include "PlayerCharacter.h"
 
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+   CameraBoom = CreateDefaultSubobject<USpringArmComponent>(FName(TEXT("CameraBoom")));
+   CameraBoom->SetupAttachment(GetRootComponent());
+   CameraBoom->AddRelativeRotation(FRotator(-90.f, 0.f, -90.f));
+
+   Camera = CreateDefaultSubobject<UCameraComponent>(FName(TEXT("Camera")));
+   Camera->SetupAttachment(CameraBoom);
 }
 
 void APlayerCharacter::BeginPlay()
