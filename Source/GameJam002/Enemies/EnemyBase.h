@@ -17,14 +17,11 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	float GetCausedDamage() const;
-	float GetMaxHealth() const;
+	FORCEINLINE float GetCausedDamage() const { return (BaseDamage + AdditionalDamage) * DamageMultiplier; }
+	FORCEINLINE float GetMaxHealth() const { return (BaseHealth + AdditionalHealth) * HealthMultiplier; }
 
 protected:
 	virtual void BeginPlay() override;
-
-	UFUNCTION()
-	void TakeDamageCallout(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
 	/*
 	* Character Stats
@@ -43,6 +40,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 	float HealthMultiplier = 1.f;
 	float Health = 1.f;
+
+	/*
+	* Misc
+	*/
+	UFUNCTION()
+	void TakeDamageCallout(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
 private:
 	UPROPERTY(EditAnywhere)

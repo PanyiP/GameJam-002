@@ -27,19 +27,9 @@ void AEnemyBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-float AEnemyBase::GetCausedDamage() const
-{
-   return (BaseDamage + AdditionalDamage) * DamageMultiplier;
-}
-
-float AEnemyBase::GetMaxHealth() const
-{
-   return (BaseHealth + AdditionalHealth) * HealthMultiplier;
-}
-
 void AEnemyBase::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
    Health = FMath::Clamp(Health - Damage, 0, GetMaxHealth());
-   UE_LOG(LogTemp, Warning, TEXT("Enemy health: %.2f"), Health);
+   UE_LOG(LogTemp, Warning, TEXT("%s health: %.2f"), *DamagedActor->GetActorNameOrLabel(), Health);
    if (Health == 0) this->Destroy();
 }

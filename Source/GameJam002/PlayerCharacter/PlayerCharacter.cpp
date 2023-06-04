@@ -178,17 +178,22 @@ void APlayerCharacter::IsMoving()
    }
 }
 
-float APlayerCharacter::GetCausedDamage() const
-{
-   return (BaseDamage + AdditionalDamage) * DamageMultiplier;
-}
-
-float APlayerCharacter::GetMaxHealth() const
-{
-   return (BaseHealth + AdditionalHealth) * HealthMultiplier;
-}
-
 void APlayerCharacter::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-   //TODO: Implement take damage
+   Health = FMath::Clamp(Health - Damage, 0, GetMaxHealth());
+   UE_LOG(LogTemp, Warning, TEXT("%s health: %.2f"), *DamagedActor->GetActorNameOrLabel(), Health);
+   if (Health > 0)
+   {
+      GetSprite()->SetLooping(false);
+      if (RunRightAnimation) GetSprite()->SetFlipbook(HitTakenAnimation);
+      if (!GetSprite()->IsPlaying()) GetSprite()->Play();
+   }
+   else
+   {
+      GetSprite()->SetLooping(false);
+      if (RunRightAnimation) GetSprite()->SetFlipbook(DeathAnimation);
+      if (!GetSprite()->IsPlaying()) GetSprite()->Play();
+
+      this->Destroy();
+   }
 }

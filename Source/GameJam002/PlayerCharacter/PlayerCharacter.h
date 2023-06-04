@@ -40,8 +40,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	float GetCausedDamage() const;
-	float GetMaxHealth() const;
+	FORCEINLINE float GetCausedDamage() const { return (BaseDamage + AdditionalDamage) * DamageMultiplier; }
+	FORCEINLINE float GetMaxHealth() const { return (BaseHealth + AdditionalHealth) * HealthMultiplier; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -74,13 +74,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	UPaperFlipbook* RunRightAnimation;
 	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* HitTakenAnimation;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* DeathAnimation;
+	UPROPERTY(EditAnywhere, Category = "Animation")
 	TArray<UPaperFlipbook*> AttackAnimations;
 
 	void UpdateAnimation();
 	void IsMoving();
-
-	ECharacterDirection CharacterDirection = ECharacterDirection::ECD_Right;
-	ECharacterState CharacterState = ECharacterState::ECS_Idle;
 
 	/*
 	* Character Stats
@@ -99,6 +100,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 	float HealthMultiplier = 1.f;
 	float Health = 1.f;
+
+	/*
+	* Misc
+	*/
+	ECharacterDirection CharacterDirection = ECharacterDirection::ECD_Right;
+	ECharacterState CharacterState = ECharacterState::ECS_Idle;
 
 	UFUNCTION()
 	void TakeDamageCallout(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
