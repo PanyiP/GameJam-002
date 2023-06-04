@@ -1,10 +1,13 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/BoxComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameJam002/Enemies/EnemyBase.h"
 #include "InputMappingContext.h"
+#include <Kismet/GameplayStatics.h>
 #include "PaperFlipbookComponent.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -17,6 +20,14 @@ APlayerCharacter::APlayerCharacter()
 
    Camera = CreateDefaultSubobject<UCameraComponent>(FName(TEXT("Camera")));
    Camera->SetupAttachment(CameraBoom);
+
+   HitBox = CreateDefaultSubobject<UBoxComponent>(FName(TEXT("HitBox")));
+   HitBox->SetupAttachment(GetRootComponent());
+   HitBox->SetBoxExtent(FVector(30.f, 25.f, 1.f));
+   HitBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+   HitBox->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
+   HitBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+   HitBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 }
 
 void APlayerCharacter::BeginPlay()
@@ -77,6 +88,7 @@ void APlayerCharacter::Attack(const FInputActionValue& Value)
       CharacterState = ECharacterState::ECS_Attacking;
       GetSprite()->SetFlipbook(AttackAnimations[FMath::RandRange(0, AttackAnimations.Num() - 1)]);
       GetSprite()->OnFinishedPlaying.AddDynamic(this, &ThisClass::AttackFinished);
+      AttackHitCheck();
    }
 }
 
@@ -84,6 +96,28 @@ void APlayerCharacter::AttackFinished()
 {
    GetSprite()->OnFinishedPlaying.RemoveDynamic(this, &ThisClass::AttackFinished);
    CharacterState = ECharacterState::ECS_Idle;
+}
+
+void APlayerCharacter::AttackHitCheck()
+{
+   TArray<AActor*> OverlappingActors;
+   HitBox->GetOverlappingActors(OverlappingActors, AEnemyBase::StaticClass());
+   for (AActor* OverlappingActor : OverlappingActors)
+   {
+      if (AEnemyBase* DamagedActor = Cast<AEnemyBase>(OverlappingActor))
+      {
+         if (AController* InstigatorController = DamagedActor->GetController())
+         {
+            UGameplayStatics::ApplyDamage(
+               DamagedActor,
+               CalculateCausedDamage(),
+               InstigatorController,
+               this,
+               UDamageType::StaticClass()
+            );
+         }
+      }
+   }
 }
 
 void APlayerCharacter::UpdateAnimation()
@@ -139,4 +173,9 @@ void APlayerCharacter::IsMoving()
    {
       CharacterState = ECharacterState::ECS_Idle;
    }
+}
+
+float APlayerCharacter::CalculateCausedDamage() const
+{
+   return (BaseDamage + AdditionalDamage) * DamageMultiplier;
 }

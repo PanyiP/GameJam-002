@@ -5,6 +5,7 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
+class UBoxComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
@@ -57,6 +58,8 @@ protected:
 	void Attack(const FInputActionValue& Value);
 	UFUNCTION()
 	void AttackFinished();
+	UFUNCTION()
+	void AttackHitCheck();
 
 	/*
 	* Animations
@@ -76,10 +79,21 @@ protected:
 	ECharacterDirection CharacterDirection = ECharacterDirection::ECD_Right;
 	ECharacterState CharacterState = ECharacterState::ECS_Idle;
 
+	/*
+	* Character Stats
+	*/
+	float BaseDamage = 5.f;
+	float AdditionalDamage = 0.f;
+	float DamageMultiplier = 1.f;
+	float CalculateCausedDamage() const;
+
 private:
 	UPROPERTY()
 	USpringArmComponent* CameraBoom;
 
 	UPROPERTY()
 	UCameraComponent* Camera;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* HitBox;
 };
