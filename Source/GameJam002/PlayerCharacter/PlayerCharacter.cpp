@@ -44,6 +44,9 @@ void APlayerCharacter::BeginPlay()
          }
       }
    }
+
+   Health = GetMaxHealth();
+   this->OnTakeAnyDamage.AddDynamic(this, &ThisClass::TakeDamageCallout);
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -110,7 +113,7 @@ void APlayerCharacter::AttackHitCheck()
          {
             UGameplayStatics::ApplyDamage(
                DamagedActor,
-               CalculateCausedDamage(),
+               GetCausedDamage(),
                InstigatorController,
                this,
                UDamageType::StaticClass()
@@ -175,7 +178,17 @@ void APlayerCharacter::IsMoving()
    }
 }
 
-float APlayerCharacter::CalculateCausedDamage() const
+float APlayerCharacter::GetCausedDamage() const
 {
    return (BaseDamage + AdditionalDamage) * DamageMultiplier;
+}
+
+float APlayerCharacter::GetMaxHealth() const
+{
+   return (BaseHealth + AdditionalHealth) * HealthMultiplier;
+}
+
+void APlayerCharacter::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+   //TODO: Implement take damage
 }

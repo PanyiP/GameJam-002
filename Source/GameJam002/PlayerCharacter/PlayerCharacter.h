@@ -40,6 +40,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	float GetCausedDamage() const;
+	float GetMaxHealth() const;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -82,10 +85,23 @@ protected:
 	/*
 	* Character Stats
 	*/
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
 	float BaseDamage = 5.f;
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
 	float AdditionalDamage = 0.f;
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
 	float DamageMultiplier = 1.f;
-	float CalculateCausedDamage() const;
+
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+	float BaseHealth = 20.f;
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+	float AdditionalHealth = 0.f;
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+	float HealthMultiplier = 1.f;
+	float Health = 1.f;
+
+	UFUNCTION()
+	void TakeDamageCallout(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
 private:
 	UPROPERTY()
