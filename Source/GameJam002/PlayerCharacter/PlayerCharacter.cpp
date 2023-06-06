@@ -45,7 +45,6 @@ void APlayerCharacter::BeginPlay()
       }
    }
 
-   Health = GetMaxHealth();
    this->OnTakeAnyDamage.AddDynamic(this, &ThisClass::TakeDamageCallout);
 }
 
@@ -180,8 +179,8 @@ void APlayerCharacter::IsMoving()
 
 void APlayerCharacter::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-   Health = FMath::Clamp(Health - Damage, 0, GetMaxHealth());
-   UE_LOG(LogTemp, Warning, TEXT("%s health: %.2f"), *DamagedActor->GetActorNameOrLabel(), Health);
+   Super::TakeDamageCallout(DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
+
    if (Health > 0)
    {
       GetSprite()->SetLooping(false);

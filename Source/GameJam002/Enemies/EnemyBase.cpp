@@ -18,7 +18,6 @@ void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-   Health = GetMaxHealth();
    this->OnTakeAnyDamage.AddDynamic(this, &ThisClass::TakeDamageCallout);
 }
 
@@ -29,7 +28,7 @@ void AEnemyBase::Tick(float DeltaTime)
 
 void AEnemyBase::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-   Health = FMath::Clamp(Health - Damage, 0, GetMaxHealth());
-   UE_LOG(LogTemp, Warning, TEXT("%s health: %.2f"), *DamagedActor->GetActorNameOrLabel(), Health);
+   Super::TakeDamageCallout(DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
+
    if (Health == 0) this->Destroy();
 }
