@@ -5,8 +5,6 @@ AEnemyBase::AEnemyBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-   HitBox = CreateDefaultSubobject<UBoxComponent>(FName(TEXT("HitBox")));
-   HitBox->SetupAttachment(GetRootComponent());
    HitBox->SetBoxExtent(FVector(30.f, 25.f, 1.f));
    HitBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
    HitBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);

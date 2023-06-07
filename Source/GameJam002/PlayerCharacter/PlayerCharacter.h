@@ -11,23 +11,6 @@ class UInputAction;
 class UPaperFlipbook;
 class USpringArmComponent;
 
-UENUM()
-enum class ECharacterDirection
-{
-	ECD_Left = 0,
-	ECD_Right,
-	ECD_MAX
-};
-
-UENUM()
-enum class ECharacterState
-{
-	ECS_Idle = 0,
-	ECS_Running,
-	ECS_Attacking,
-	ECD_MAX
-};
-
 UCLASS()
 class GAMEJAM002_API APlayerCharacter : public ACharacterBase
 {
@@ -82,9 +65,6 @@ protected:
 	/*
 	* Misc
 	*/
-	ECharacterDirection CharacterDirection = ECharacterDirection::ECD_Right;
-	ECharacterState CharacterState = ECharacterState::ECS_Idle;
-
 	virtual void TakeDamageCallout(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser) override;
 
 private:

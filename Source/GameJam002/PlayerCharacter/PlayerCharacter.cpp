@@ -21,8 +21,6 @@ APlayerCharacter::APlayerCharacter()
    Camera = CreateDefaultSubobject<UCameraComponent>(FName(TEXT("Camera")));
    Camera->SetupAttachment(CameraBoom);
 
-   HitBox = CreateDefaultSubobject<UBoxComponent>(FName(TEXT("HitBox")));
-   HitBox->SetupAttachment(GetRootComponent());
    HitBox->SetBoxExtent(FVector(30.f, 25.f, 1.f));
    HitBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
    HitBox->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
