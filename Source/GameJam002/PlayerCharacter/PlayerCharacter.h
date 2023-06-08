@@ -22,6 +22,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	FORCEINLINE void GainExperience(int32 Experience) { CharacterExperience += Experience; }
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -47,15 +49,7 @@ protected:
 	* Animations
 	*/
 	UPROPERTY(EditAnywhere, Category = "Animation")
-	UPaperFlipbook* IdleAnimation;
-	UPROPERTY(EditAnywhere, Category = "Animation")
-	UPaperFlipbook* RunLeftAnimation;
-	UPROPERTY(EditAnywhere, Category = "Animation")
-	UPaperFlipbook* RunRightAnimation;
-	UPROPERTY(EditAnywhere, Category = "Animation")
 	UPaperFlipbook* HitTakenAnimation;
-	UPROPERTY(EditAnywhere, Category = "Animation")
-	UPaperFlipbook* DeathAnimation;
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	TArray<UPaperFlipbook*> AttackAnimations;
 

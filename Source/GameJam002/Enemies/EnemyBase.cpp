@@ -1,5 +1,7 @@
-#include "EnemyBase.h"
 #include "Components/BoxComponent.h"
+#include "EnemyBase.h"
+#include "GameJam002/PlayerCharacter/PlayerCharacter.h"
+#include "PaperFlipbookComponent.h"
 
 AEnemyBase::AEnemyBase()
 {
@@ -28,5 +30,28 @@ void AEnemyBase::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDa
 {
    Super::TakeDamageCallout(DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
 
-   if (Health == 0) this->Destroy();
+   if (Health == 0)
+   {
+      if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(DamageCauser))
+      {
+         PlayerCharacter->GainExperience(GetOnDeathExperience());
+         if (DeathAnimation)
+         {
+            GetSprite()->SetFlipbook(DeathAnimation);
+            GetSprite()->SetLooping(false);
+            GetSprite()->OnFinishedPlaying.AddDynamic(this, &ThisClass::DeathAnimationFinished);
+            if (!GetSprite()->IsPlaying()) GetSprite()->Play();
+         }
+         else
+         {
+            this->Destroy();
+         }
+      }
+   }
+}
+
+void AEnemyBase::DeathAnimationFinished()
+{
+   GetSprite()->OnFinishedPlaying.RemoveDynamic(this, &ThisClass::DeathAnimationFinished);
+   this->Destroy();
 }

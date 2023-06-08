@@ -6,6 +6,7 @@
 #include "CharacterBase.generated.h"
 
 class UBoxComponent;
+class UPaperFlipbook;
 class UTextRenderComponent;
 
 UCLASS()
@@ -41,6 +42,23 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 	float HealthMultiplier = 1.f;
 	float Health = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+	int32 CharacterLevel = 1;
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+	int32 CharacterExperience = 0;
+
+	/*
+	* Animations
+	*/
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* IdleAnimation;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* RunLeftAnimation;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* RunRightAnimation;
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UPaperFlipbook* DeathAnimation;
 
 	/*
 	* Misc
