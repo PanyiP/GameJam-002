@@ -71,6 +71,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UTextRenderComponent* DamageTakenText;
+	UFUNCTION()
 	void DamageTakenTimerHandleCallout();
 
 	UFUNCTION()
