@@ -62,9 +62,9 @@ protected:
 	virtual void TakeDamageCallout(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser) override;
 
 private:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
 };
