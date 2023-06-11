@@ -23,8 +23,8 @@ protected:
 	virtual void TakeDamageCallout(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser) override;
 
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
-	int32 OnDeathBaseExperience = 2;
-	FORCEINLINE int32 GetOnDeathExperience() const { return OnDeathBaseExperience * CharacterLevel; }
+	float OnDeathBaseExperience = 5.f;
+	FORCEINLINE float GetOnDeathExperience() const { return OnDeathBaseExperience * CharacterLevel; }
 
 	UFUNCTION()
 	void DeathAnimationFinished();

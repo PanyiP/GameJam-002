@@ -22,7 +22,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	FORCEINLINE void GainExperience(int32 Experience) { CharacterExperience += Experience; }
+	void GainExperience(float Experience);
 
 protected:
 	virtual void BeginPlay() override;
@@ -82,4 +82,6 @@ private:
 	UCameraComponent* Camera;
 
 	FTimerHandle RunningSoundTimerHandle;
+
+	void GainLevel();
 };

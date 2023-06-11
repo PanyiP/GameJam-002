@@ -209,3 +209,26 @@ void APlayerCharacter::TakeDamageCallout(AActor* DamagedActor, float Damage, con
       this->Destroy();
    }
 }
+
+void APlayerCharacter::GainExperience(float Experience)
+{
+   CharacterExperience += Experience;
+
+   if (CharacterLevelMap::CharLvlXpMap.Contains(CharacterLevel + 1))
+   {
+      if (CharacterExperience >= CharacterLevelMap::CharLvlXpMap[CharacterLevel + 1])
+      {
+         GainLevel();
+      }
+   }
+}
+
+void APlayerCharacter::GainLevel()
+{
+   CharacterLevel++;
+
+   BaseMinimumDamage++;
+   BaseMaximumDamage++;
+
+   Health = GetMaxHealth();
+}

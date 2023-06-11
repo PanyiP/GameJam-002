@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreMinimal.h"
+
 UENUM()
 enum class ECharacterDirection
 {
@@ -15,4 +17,10 @@ enum class ECharacterState
 	ECS_Running,
 	ECS_Attacking,
 	ECD_MAX
+};
+
+static class CharacterLevelMap
+{
+public:
+	static TMap<int32, float> CharLvlXpMap;
 };

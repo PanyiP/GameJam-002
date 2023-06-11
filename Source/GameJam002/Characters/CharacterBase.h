@@ -19,7 +19,8 @@ public:
 	ACharacterBase();
 
 	FORCEINLINE float GetCausedDamage() const { return (FMath::RandRange(BaseMinimumDamage, BaseMaximumDamage) + AdditionalDamage) * DamageMultiplier; }
-	FORCEINLINE float GetMaxHealth() const { return (BaseHealth + AdditionalHealth) * HealthMultiplier; }
+	FORCEINLINE float GetMaxHealth() const { return (BaseHealth + (CharacterLevel * HealthGainedPerLevel) + AdditionalHealth) * HealthMultiplier; }
+	FORCEINLINE int32 GetCharacterLevel() const { return CharacterLevel; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -43,11 +44,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 	float HealthMultiplier = 1.f;
 	float Health = 1.f;
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+	float HealthGainedPerLevel = 5.f;
 
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 	int32 CharacterLevel = 1;
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
-	int32 CharacterExperience = 0;
+	float CharacterExperience = 0.f;
 
 	/*
 	* Animations

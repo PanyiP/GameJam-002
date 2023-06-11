@@ -34,7 +34,7 @@ void AEnemyBase::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDa
    {
       if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(DamageCauser))
       {
-         PlayerCharacter->GainExperience(GetOnDeathExperience());
+         PlayerCharacter->GainExperience(GetOnDeathExperience() * FMath::Clamp((float)this->CharacterLevel / (float)PlayerCharacter->GetCharacterLevel(), 0.f, 1.f));
          if (DeathAnimation)
          {
             GetSprite()->SetFlipbook(DeathAnimation);
