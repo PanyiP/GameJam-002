@@ -57,6 +57,19 @@ protected:
 	void IsMoving();
 
 	/*
+	* Sounds
+	*/
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	USoundBase* RunningSound;
+	void PlayRunningSound();
+	bool bIsPlayingRunningSound = false;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	float RunningSoundFrequency = 0.5f;
+
+	UFUNCTION()
+	void RunningSoundTimerHandleCallout();
+
+	/*
 	* Misc
 	*/
 	virtual void TakeDamageCallout(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser) override;
@@ -67,4 +80,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
+
+	FTimerHandle RunningSoundTimerHandle;
 };

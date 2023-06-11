@@ -134,6 +134,7 @@ void APlayerCharacter::UpdateAnimation()
       break;
    case ECharacterState::ECS_Running:
       GetSprite()->SetLooping(true);
+      PlayRunningSound();
       switch (CharacterDirection)
       {
       case ECharacterDirection::ECD_Left:
@@ -173,6 +174,20 @@ void APlayerCharacter::IsMoving()
    {
       CharacterState = ECharacterState::ECS_Idle;
    }
+}
+
+void APlayerCharacter::PlayRunningSound()
+{
+   if (bIsPlayingRunningSound || RunningSound == nullptr) return;
+
+   UGameplayStatics::PlaySoundAtLocation(this, RunningSound, GetActorLocation());
+   GetWorldTimerManager().SetTimer(RunningSoundTimerHandle, this, &ThisClass::RunningSoundTimerHandleCallout, RunningSoundFrequency);
+   bIsPlayingRunningSound = true;
+}
+
+void APlayerCharacter::RunningSoundTimerHandleCallout()
+{
+   bIsPlayingRunningSound = false;
 }
 
 void APlayerCharacter::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
