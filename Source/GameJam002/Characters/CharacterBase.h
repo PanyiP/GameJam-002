@@ -6,6 +6,7 @@
 #include "CharacterBase.generated.h"
 
 class UBoxComponent;
+class USoundBase;
 class UPaperFlipbook;
 class UTextRenderComponent;
 
@@ -59,6 +60,12 @@ protected:
 	UPaperFlipbook* RunRightAnimation;
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	UPaperFlipbook* DeathAnimation;
+
+	/*
+	* Sounds
+	*/
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	USoundBase* AttackSound;
 
 	/*
 	* Misc

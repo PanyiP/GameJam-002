@@ -1,5 +1,5 @@
-#include "Components/BoxComponent.h"
 #include "EnemyBase.h"
+#include "Components/BoxComponent.h"
 #include "GameJam002/PlayerCharacter/PlayerCharacter.h"
 #include "PaperFlipbookComponent.h"
 

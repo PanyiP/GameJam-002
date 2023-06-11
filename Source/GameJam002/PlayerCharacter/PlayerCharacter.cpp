@@ -7,7 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameJam002/Enemies/EnemyBase.h"
 #include "InputMappingContext.h"
-#include <Kismet/GameplayStatics.h>
+#include "Kismet/GameplayStatics.h"
 #include "PaperFlipbookComponent.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -87,6 +87,7 @@ void APlayerCharacter::Attack(const FInputActionValue& Value)
       CharacterState = ECharacterState::ECS_Attacking;
       GetSprite()->SetFlipbook(AttackAnimations[FMath::RandRange(0, AttackAnimations.Num() - 1)]);
       GetSprite()->OnFinishedPlaying.AddDynamic(this, &ThisClass::AttackFinished);
+      if (AttackSound) UGameplayStatics::PlaySoundAtLocation(this, AttackSound, GetActorLocation());
       AttackHitCheck();
    }
 }
