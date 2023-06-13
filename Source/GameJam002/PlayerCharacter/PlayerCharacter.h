@@ -6,6 +6,7 @@
 #include "PlayerCharacter.generated.h"
 
 class UCameraComponent;
+class UCharacterOverlay;
 class UInputMappingContext;
 class UInputAction;
 class UPaperFlipbook;
@@ -80,6 +81,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
+
+	UPROPERTY(EditAnywhere, category = "HUD")
+	TSubclassOf<class UUserWidget> HUDClass;
+	UPROPERTY()
+	UCharacterOverlay* HUD;
+	void UpdateHUD();
 
 	FTimerHandle RunningSoundTimerHandle;
 

@@ -1,6 +1,8 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/PawnMovementComponent.h"
@@ -9,6 +11,7 @@
 #include "InputMappingContext.h"
 #include "Kismet/GameplayStatics.h"
 #include "PaperFlipbookComponent.h"
+#include "GameJam002/UI/CharacterOverlay.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -31,7 +34,9 @@ void APlayerCharacter::BeginPlay()
 {
    Super::BeginPlay();
 
-   if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+   APlayerController* PlayerController = Cast<APlayerController>(GetController());
+
+   if (PlayerController)
    {
       if (UEnhancedInputLocalPlayerSubsystem* InputSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
       {
@@ -39,6 +44,13 @@ void APlayerCharacter::BeginPlay()
          {
             InputSystem->AddMappingContext(InputMappingContext, 0);
          }
+      }
+
+      if (HUDClass)
+      {
+         HUD = CreateWidget<UCharacterOverlay>(PlayerController, HUDClass);
+         HUD->AddToViewport();
+         UpdateHUD();
       }
    }
 
@@ -194,6 +206,8 @@ void APlayerCharacter::TakeDamageCallout(AActor* DamagedActor, float Damage, con
 {
    Super::TakeDamageCallout(DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
 
+   UpdateHUD();
+
    if (Health > 0)
    {
       GetSprite()->SetLooping(false);
@@ -214,6 +228,8 @@ void APlayerCharacter::GainExperience(float Experience)
 {
    CharacterExperience += Experience;
 
+   UpdateHUD();
+
    if (CharacterLevelMap::CharLvlXpMap.Contains(CharacterLevel + 1))
    {
       if (CharacterExperience >= CharacterLevelMap::CharLvlXpMap[CharacterLevel + 1])
@@ -231,4 +247,20 @@ void APlayerCharacter::GainLevel()
    BaseMaximumDamage++;
 
    Health = GetMaxHealth();
+
+   UpdateHUD();
+}
+
+void APlayerCharacter::UpdateHUD()
+{
+   if (HUD)
+   {
+      HUD->HealthValueText->SetText(FText::FromString(FString::Printf(TEXT("%d / %d"), FMath::FloorToInt(Health), FMath::FloorToInt(GetMaxHealth()))));
+      HUD->HealthBar->SetPercent(Health / GetMaxHealth());
+
+      if (CharacterLevelMap::CharLvlXpMap.Contains(CharacterLevel + 1))
+      {
+         HUD->XPBar->SetPercent(CharacterExperience / CharacterLevelMap::CharLvlXpMap[CharacterLevel + 1]);
+      }
+   }
 }
