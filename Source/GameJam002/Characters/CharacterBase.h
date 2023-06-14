@@ -18,6 +18,8 @@ class GAMEJAM002_API ACharacterBase : public APaperCharacter
 public:
 	ACharacterBase();
 
+	bool bIsDead = false;
+
 	FORCEINLINE float GetCausedDamage() const { return (FMath::RandRange(BaseMinimumDamage, BaseMaximumDamage) + AdditionalDamage) * DamageMultiplier; }
 	FORCEINLINE float GetMaxHealth() const { return (BaseHealth + (CharacterLevel * HealthGainedPerLevel) + AdditionalHealth) * HealthMultiplier; }
 	FORCEINLINE int32 GetCharacterLevel() const { return CharacterLevel; }

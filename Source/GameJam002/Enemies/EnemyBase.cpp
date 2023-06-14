@@ -28,10 +28,14 @@ void AEnemyBase::Tick(float DeltaTime)
 
 void AEnemyBase::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+   if (bIsDead) return;
+
    Super::TakeDamageCallout(DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
 
    if (Health == 0)
    {
+      bIsDead = true;
+
       if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(DamageCauser))
       {
          PlayerCharacter->GainExperience(GetOnDeathExperience() * FMath::Clamp((float)this->CharacterLevel / (float)PlayerCharacter->GetCharacterLevel(), 0.f, 1.f));

@@ -73,6 +73,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
    {
       Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
       Input->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ThisClass::Attack);
+      Input->BindAction(OpenPauseMenuAction, ETriggerEvent::Triggered, this, &ThisClass::OpenPauseMenu);
    }
 }
 
@@ -129,6 +130,19 @@ void APlayerCharacter::AttackHitCheck()
             );
          }
       }
+   }
+}
+
+void APlayerCharacter::OpenPauseMenu(const FInputActionValue& Value)
+{
+   APlayerController* PlayerController = Cast<APlayerController>(GetController());
+
+   if (PauseMenuClass && PlayerController)
+   {
+      HUD->RemoveFromParent();
+      PauseMenu = CreateWidget<UCharacterOverlay>(PlayerController, PauseMenuClass);
+      PauseMenu->AddToViewport();
+      PlayerController->SetShowMouseCursor(true);
    }
 }
 
@@ -204,6 +218,8 @@ void APlayerCharacter::RunningSoundTimerHandleCallout()
 
 void APlayerCharacter::TakeDamageCallout(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+   if (bIsDead) return;
+
    Super::TakeDamageCallout(DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
 
    UpdateHUD();
@@ -216,6 +232,7 @@ void APlayerCharacter::TakeDamageCallout(AActor* DamagedActor, float Damage, con
    }
    else
    {
+      bIsDead = true;
       GetSprite()->SetLooping(false);
       if (RunRightAnimation) GetSprite()->SetFlipbook(DeathAnimation);
       if (!GetSprite()->IsPlaying()) GetSprite()->Play();
@@ -260,7 +277,13 @@ void APlayerCharacter::UpdateHUD()
 
       if (CharacterLevelMap::CharLvlXpMap.Contains(CharacterLevel + 1))
       {
-         HUD->XPBar->SetPercent(CharacterExperience / CharacterLevelMap::CharLvlXpMap[CharacterLevel + 1]);
+         float XpSinceLastLevelUp = CharacterExperience - CharacterLevelMap::CharLvlXpMap[CharacterLevel];
+         float TotalXpForNextLevel = CharacterLevelMap::CharLvlXpMap[CharacterLevel + 1] - CharacterLevelMap::CharLvlXpMap[CharacterLevel];
+         HUD->XPBar->SetPercent(XpSinceLastLevelUp / TotalXpForNextLevel);
+         HUD->XPValueText->SetText(FText::FromString(FString::Printf(TEXT("%d / %d"), FMath::FloorToInt(XpSinceLastLevelUp), FMath::FloorToInt(TotalXpForNextLevel))));
       }
+
+      HUD->CharLvlText->SetText(FText::FromString(FString::Printf(TEXT("Character level: %d"), GetCharacterLevel())));
+      HUD->DamageText->SetText(FText::FromString(FString::Printf(TEXT("Damage: %.1f - %.1f"), (BaseMinimumDamage + AdditionalDamage) * DamageMultiplier, (BaseMaximumDamage + AdditionalDamage) * DamageMultiplier)));
    }
 }

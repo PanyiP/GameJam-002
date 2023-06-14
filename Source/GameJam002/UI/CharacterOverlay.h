@@ -21,4 +21,13 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* XPBar;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* XPValueText;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* CharLvlText;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* DamageText;
 };

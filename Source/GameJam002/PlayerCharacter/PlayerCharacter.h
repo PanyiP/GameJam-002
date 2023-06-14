@@ -46,6 +46,10 @@ protected:
 	UFUNCTION()
 	void AttackHitCheck();
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* OpenPauseMenuAction;
+	void OpenPauseMenu(const FInputActionValue& Value);
+
 	/*
 	* Animations
 	*/
@@ -87,6 +91,11 @@ private:
 	UPROPERTY()
 	UCharacterOverlay* HUD;
 	void UpdateHUD();
+
+	UPROPERTY(EditAnywhere, category = "HUD")
+	TSubclassOf<class UUserWidget> PauseMenuClass;
+	UPROPERTY()
+	UCharacterOverlay* PauseMenu;
 
 	FTimerHandle RunningSoundTimerHandle;
 
