@@ -95,7 +95,9 @@ private:
 	UPROPERTY(EditAnywhere, category = "HUD")
 	TSubclassOf<class UUserWidget> PauseMenuClass;
 	UPROPERTY()
-	UCharacterOverlay* PauseMenu;
+	UUserWidget* PauseMenu;
+	UPROPERTY(EditAnywhere,	Category = "HUD", BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool bPauseMenuOpened = false;
 
 	FTimerHandle RunningSoundTimerHandle;
 

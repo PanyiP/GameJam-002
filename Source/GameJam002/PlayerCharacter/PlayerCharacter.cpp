@@ -79,6 +79,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
+   if (bPauseMenuOpened) return;
    if (CharacterState == ECharacterState::ECS_Attacking) return;
 
    AddMovementInput(FVector(Value.Get<FVector2D>().X, Value.Get<FVector2D>().Y, 0.f));
@@ -95,6 +96,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 
 void APlayerCharacter::Attack(const FInputActionValue& Value)
 {
+   if (bPauseMenuOpened) return;
    if (CharacterState != ECharacterState::ECS_Attacking)
    {
       CharacterState = ECharacterState::ECS_Attacking;
@@ -140,9 +142,13 @@ void APlayerCharacter::OpenPauseMenu(const FInputActionValue& Value)
    if (PauseMenuClass && PlayerController)
    {
       HUD->RemoveFromParent();
-      PauseMenu = CreateWidget<UCharacterOverlay>(PlayerController, PauseMenuClass);
-      PauseMenu->AddToViewport();
-      PlayerController->SetShowMouseCursor(true);
+      PauseMenu = CreateWidget<UUserWidget>(PlayerController, PauseMenuClass);
+      if (PauseMenu)
+      {
+         PauseMenu->AddToViewport();
+         PlayerController->SetShowMouseCursor(true);
+         bPauseMenuOpened = true;
+      }
    }
 }
 
